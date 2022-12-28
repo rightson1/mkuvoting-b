@@ -1,9 +1,15 @@
 import db from "../../../models/db";
 import Position from "../../../models/Position";
-const handler = async (req, res) => {
-    await db()
+import NextCors from "nextjs-cors";
+const handler = async(req, res) => {
+    await db();
+    await NextCors(req, res, {
+        // Options
+        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+        origin: "*",
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
     if (req.method === "POST") {
-
         try {
             const position = await Position.create(req.body);
             res.status(201).json(position);
@@ -40,7 +46,5 @@ const handler = async (req, res) => {
     } else {
         res.status(200).json({ error: "Method not allowed" });
     }
-
-
 };
 export default handler;

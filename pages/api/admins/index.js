@@ -1,7 +1,14 @@
 import db from "../../../models/db";
+import NextCors from "nextjs-cors";
 import Admin from "../../../models/Admin";
-const handler = async (req, res) => {
-    await db()
+const handler = async(req, res) => {
+    await NextCors(req, res, {
+        // Options
+        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+        origin: "*",
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
+    await db();
     if (req.method === "POST") {
         const { name, email, password } = req.body;
 
@@ -43,14 +50,9 @@ const handler = async (req, res) => {
             res.status(500).json(error);
         }
     } else if (req.method === "PUT") {
-        res.status(200).json({ error: "AM FUCKED" })
-    }
-
-    else {
+        res.status(200).json({ error: "AM FUCKED" });
+    } else {
         res.status(200).json({ error: "Method not allowed" });
     }
-
-
-
 };
 export default handler;
