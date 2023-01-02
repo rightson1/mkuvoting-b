@@ -1,4 +1,4 @@
-import db from "../../../utils/db";
+import db from "../../../utils/admin";
 import NextCors from "nextjs-cors";
 import handleCors from "../../../handleCors";
 
@@ -7,13 +7,13 @@ const handler = async(req, res) => {
     handleCors(req, res);
 
     if (method === "GET") {
-        const events = await db.collection("events").get();
-        const event = events.docs.map((doc) => doc.data());
+        const admins = await db.collection("admins").get();
+        const admin = admins.docs.map((doc) => doc.data());
 
-        res.status(200).json(event);
+        res.status(200).json(admin);
     } else if (method === "POST") {
         try {
-            const { id } = await db.collection("events").add({
+            const { id } = await db.collection("admins").add({
                 ...req.body,
                 created: new Date().toISOString(),
             });
@@ -24,8 +24,8 @@ const handler = async(req, res) => {
     } else if (method === "DELETE") {
         const { id } = req.query;
         try {
-            const event = db.collection("events").where("id", "==", id);
-            event.get().then((querySnapshot) => {
+            const admin = db.collection("admins").where("id", "==", id);
+            admin.get().then((querySnapshot) => {
                 querySnapshot.forEach(function(doc) {
                     doc.ref.delete();
                 });
@@ -37,14 +37,14 @@ const handler = async(req, res) => {
     } else if (method === "PUT") {
         const { id } = req.query;
         try {
-            const event = await db
-                .collection("events")
+            const admin = await db
+                .collection("admins")
                 .doc(id)
                 .update({
                     ...req.body,
                     updated: new Date().toISOString(),
                 });
-            res.status(200).json(event);
+            res.status(200).json(admin);
         } catch (error) {
             res.status(500).json(error);
         }

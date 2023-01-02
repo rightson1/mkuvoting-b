@@ -3,13 +3,16 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "next -p 3002",
         "build": "next build",
         "start": "next start",
         "lint": "next lint"
     },
     "dependencies": {
         "autoprefixer": "^10.4.9",
+        "dashify": "^2.0.0",
+        "firebase": "^9.15.0",
+        "firebase-admin": "^11.4.1",
         "mongoose": "^6.8.1",
         "next": "^12.3.0",
         "nextjs-cors": "^2.1.2",

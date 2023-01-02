@@ -7,13 +7,13 @@ const handler = async(req, res) => {
     handleCors(req, res);
 
     if (method === "GET") {
-        const events = await db.collection("events").get();
-        const event = events.docs.map((doc) => doc.data());
+        const faqs = await db.collection("faqs").get();
+        const faq = faqs.docs.map((doc) => ({ id: doc.id, faq: doc.data() }));
 
-        res.status(200).json(event);
+        res.status(200).json(faq);
     } else if (method === "POST") {
         try {
-            const { id } = await db.collection("events").add({
+            const { id } = await db.collection("faqs").add({
                 ...req.body,
                 created: new Date().toISOString(),
             });
@@ -24,27 +24,22 @@ const handler = async(req, res) => {
     } else if (method === "DELETE") {
         const { id } = req.query;
         try {
-            const event = db.collection("events").where("id", "==", id);
-            event.get().then((querySnapshot) => {
-                querySnapshot.forEach(function(doc) {
-                    doc.ref.delete();
-                });
-            });
-            res.status(200).json("deleted");
+            const faq = await db.collection("faqs").doc(id).delete();
+            res.status(200).json(faq);
         } catch (error) {
             res.status(500).json(error);
         }
     } else if (method === "PUT") {
         const { id } = req.query;
         try {
-            const event = await db
-                .collection("events")
+            const faq = await db
+                .collection("faqs")
                 .doc(id)
                 .update({
                     ...req.body,
                     updated: new Date().toISOString(),
                 });
-            res.status(200).json(event);
+            res.status(200).json(faq);
         } catch (error) {
             res.status(500).json(error);
         }
