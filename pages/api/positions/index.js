@@ -1,50 +1,56 @@
 import db from "../../../models/db";
 import Position from "../../../models/Position";
-import NextCors from "nextjs-cors";
-const handler = async(req, res) => {
-    await db();
-    await NextCors(req, res, {
-        // Options
-        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-        origin: "*",
-        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    });
-    if (req.method === "POST") {
-        try {
-            const position = await Position.create(req.body);
-            res.status(201).json(position);
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    } else if (req.method === "GET") {
-        const { name } = req.query;
-        if (name) {
-            try {
-                const position = await Position.findOne({ name });
-
-                res.status(200).json(position);
-            } catch (error) {
-                res.status(500).json(error);
-            }
-        } else {
-            try {
-                const positions = await Position.find();
-
-                res.status(200).json(positions);
-            } catch (error) {
-                res.status(500).json(error);
-            }
-        }
-    } else if (req.method === "DELETE") {
-        const { id } = req.query;
-        try {
-            const position = await Position.findOneAndDelete({ _id: id });
-            res.status(200).json(position);
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    } else {
-        res.status(200).json({ error: "Method not allowed" });
+import handleCors from "../../../handleCors";
+const handler = async (req, res) => {
+  await db();
+  await handleCors(req, res);
+  if (req.method === "POST") {
+    try {
+      const position = await Position.create(req.body);
+      res.status(201).json(position);
+    } catch (error) {
+      res.status(500).json(error);
     }
+  } else if (req.method === "GET") {
+    const { name } = req.query;
+    if (name) {
+      try {
+        const position = await Position.findOne({ name });
+
+        res.status(200).json(position);
+      } catch (error) {
+        res.status(500).json(error);
+      }
+    } else {
+      try {
+        const positions = await Position.find();
+
+        res.status(200).json(positions);
+      } catch (error) {
+        res.status(500).json(error);
+      }
+    }
+  } else if (req.method === "PUT") {
+    const { id } = req.query;
+    try {
+      const position = await Position.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      console.log(req.body);
+      res.status(200).json(position);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  } else if (req.method === "DELETE") {
+    const { id } = req.query;
+    try {
+      const position = await Position.findOneAndDelete({ _id: id });
+      res.status(200).json(position);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  } else {
+    res.status(200).json({ error: "Method not allowed" });
+  }
 };
 export default handler;
