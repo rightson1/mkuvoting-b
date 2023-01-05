@@ -6,13 +6,16 @@ const handler = async(req, res) => {
     handleCors(req, res);
 
     if (method === "GET") {
-        const faqs = await db.collection("faqs").get();
-        const faq = faqs.docs.map((doc) => ({ id: doc.id, faq: doc.data() }));
+        const notifications = await db.collection("notifications").get();
+        const notification = notifications.docs.map((doc) => ({
+            id: doc.id,
+            notification: doc.data(),
+        }));
 
-        res.status(200).json(faq);
+        res.status(200).json(notification);
     } else if (method === "POST") {
         try {
-            const { id } = await db.collection("faqs").add({
+            const { id } = await db.collection("notifications").add({
                 ...req.body,
                 created: new Date().toISOString(),
             });
@@ -23,22 +26,25 @@ const handler = async(req, res) => {
     } else if (method === "DELETE") {
         const { id } = req.query;
         try {
-            const faq = await db.collection("faqs").doc(id).delete();
-            res.status(200).json(faq);
+            const notification = await db
+                .collection("notifications")
+                .doc(id)
+                .delete();
+            res.status(200).json(notification);
         } catch (error) {
             res.status(500).json(error);
         }
     } else if (method === "PUT") {
         const { id } = req.query;
         try {
-            const faq = await db
-                .collection("faqs")
+            const notification = await db
+                .collection("notifications")
                 .doc(id)
                 .update({
                     ...req.body,
                     updated: new Date().toISOString(),
                 });
-            res.status(200).json(faq);
+            res.status(200).json(notification);
         } catch (error) {
             res.status(500).json(error);
         }
