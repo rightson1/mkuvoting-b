@@ -15,8 +15,18 @@ const handler = async(req, res) => {
             res.status(500).json(error);
         }
     } else if (req.method === "GET") {
+        const { reg } = req.query;
         const { email } = req.query;
-        if (email) {
+        if (reg) {
+            try {
+                const voter = await Voter.count({
+                    reg,
+                });
+                res.status(200).json(voter);
+            } catch (error) {
+                res.status(500).json(error);
+            }
+        } else if (email) {
             try {
                 const voter = await Voter.findOne({ email });
 

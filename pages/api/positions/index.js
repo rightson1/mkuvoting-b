@@ -3,7 +3,7 @@ import Position from "../../../models/Position";
 import handleCors from "../../../handleCors";
 const handler = async(req, res) => {
     await db();
-    await handleCors(req, res);
+    handleCors(req, res);
     if (req.method === "POST") {
         try {
             const position = await Position.create(req.body);
@@ -13,6 +13,7 @@ const handler = async(req, res) => {
         }
     } else if (req.method === "GET") {
         const { id } = req.query;
+        const { vote } = req.query;
 
         if (id) {
             try {
@@ -24,6 +25,7 @@ const handler = async(req, res) => {
         } else {
             try {
                 const positions = await Position.find();
+                console.log("getting all positions");
 
                 res.status(200).json(positions);
             } catch (error) {
