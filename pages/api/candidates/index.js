@@ -39,11 +39,15 @@ const handler = async(req, res) => {
             res.status(500).json(error);
         }
     } else if (method === "PUT") {
-        const { id } = req.query;
+        const { reg } = req.query;
         try {
-            const candidateUpdate = await Candidate.findByIdAndUpdate(id, req.body, {
-                new: true,
-            });
+            const candidateUpdate = await Candidate.findOneAndUpdate({
+                    reg,
+                },
+                req.body, {
+                    new: true,
+                }
+            );
             res.status(200).json(candidateUpdate);
         } catch (error) {
             res.status(500).json(error);

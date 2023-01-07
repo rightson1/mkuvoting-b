@@ -43,8 +43,9 @@ const handler = async(req, res) => {
                         return rest;
                     });
                     res.status(200).json(results);
+                } else if (!voter) {
+                    res.status(200).json(voter);
                 }
-                res.status(200).json(voter);
             } catch (error) {
                 res.status(500).json(error);
             }
