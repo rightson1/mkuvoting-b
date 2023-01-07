@@ -18,12 +18,11 @@ const handler = async(req, res) => {
             });
             res.status(200).json(voter);
         } else if (position) {
-            const votes = await Vote.aggregate([
-                // {
-                //     $match: {
-                //         position: position,
-                //     },
-                // },
+            const votes = await Vote.aggregate([{
+                    $match: {
+                        position: position,
+                    },
+                },
                 {
                     $group: {
                         _id: "$candidateName",
