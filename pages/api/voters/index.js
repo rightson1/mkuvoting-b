@@ -45,8 +45,6 @@ const handler = async(req, res) => {
                     res.status(200).json(results);
                 }
                 res.status(200).json(voter);
-
-                res.status(200).json(voter);
             } catch (error) {
                 res.status(500).json(error);
             }
