@@ -32,7 +32,20 @@ const handler = async(req, res) => {
             ]);
             res.status(200).json(votes);
         } else {
-            const votes = await Vote.find();
+            // const votes = await Vote.aggregate([{
+            //     $group: {
+            //         _id: { candidateId: "$candidateId", name: "$candidateName" },
+
+            //         count: { $sum: 1 },
+            //     },
+            // }, ]);
+            const votes = await Vote.aggregate([{
+                $group: {
+                    _id: { position: "$position", name: "$candidateName" },
+
+                    count: { $sum: 1 },
+                },
+            }, ]);
             res.status(200).json(votes);
         }
     } else if (method === "POST") {

@@ -52,6 +52,7 @@ const handler = async(req, res) => {
         }
     } else if (req.method === "DELETE") {
         const { id } = req.query;
+        console.log(id);
         try {
             const voter = await Voter.findOneAndDelete({ _id: id });
             res.status(200).json(voter);

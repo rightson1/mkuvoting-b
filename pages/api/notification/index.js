@@ -3,7 +3,7 @@ import handleCors from "../../../handleCors";
 
 const handler = async(req, res) => {
     const { method } = req;
-    handleCors(req, res);
+    await handleCors(req, res);
 
     if (method === "GET") {
         const notifications = await db.collection("notifications").get();

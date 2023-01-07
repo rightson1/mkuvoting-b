@@ -3,7 +3,7 @@ import Position from "../../../models/Position";
 import handleCors from "../../../handleCors";
 const handler = async(req, res) => {
     await db();
-    handleCors(req, res);
+    await handleCors(req, res);
     if (req.method === "POST") {
         try {
             const position = await Position.create(req.body);
