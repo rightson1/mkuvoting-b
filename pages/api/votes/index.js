@@ -2,7 +2,6 @@ import NextCors from "nextjs-cors";
 import handleCors from "../../../handleCors";
 import Vote from "../../../models/Vote";
 import mongodb from "../../../models/db";
-import db from "../../../utils/db";
 
 const handler = async(req, res) => {
     const { method } = req;
@@ -51,11 +50,7 @@ const handler = async(req, res) => {
     } else if (method === "POST") {
         try {
             const votes = await Vote.create(req.body);
-            await Promise.all(
-                req.body.map(async(vote) => {
-                    return db.collection("votes").add(vote);
-                })
-            );
+
             res.status(200).json("sucess");
         } catch (e) {
             res.status(400).json({ message: "Something went wrong" });
