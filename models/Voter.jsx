@@ -11,6 +11,10 @@ const VoterSchema = new Schema({
     },
     password: {
         type: String,
+        default: null,
+    },
+    name: {
+        type: String,
         required: true,
     },
     isDeleted: {
