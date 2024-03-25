@@ -20,7 +20,7 @@ const handler = async (req, res) => {
           const votes = await Vote.aggregate([
             {
               $match: {
-                position: `${position} `,
+                $or: [{ position: `${position} ` }, { position: position }],
               },
             },
             {
